@@ -1,4 +1,8 @@
+import { Admin } from "../models/admin.js";
 import { Photos } from "../models/photos.js";
+import { User } from "../models/users.js";
+import { send_cookies } from "../utils/features.js";
+import bcrypt from "bcrypt";
 
 export const getAllImage = async(req,res,next) =>{
     try {
@@ -147,4 +151,70 @@ export const updateImage = async(req,res,next) =>{
 }
 
 
+
+
+export const adminRegister = async (req, res) => {
+    const { firstname,lastname, username, password, email, } = req.body; // distructering values from an object
+    let admin = await Admin.findOne({ email });
+    let user = await User.findOne({ email });
+  
+  
+    if (admin){ 
+        
+        return res.status(404).json({
+        success: false,
+        message: "Admin Already Exist",
+      });
+    
+    }
+    else{
+        if (user){ 
+        
+            return res.status(404).json({
+            success: false,
+            message: "User Already Exist",
+          });
+        
+        }   
+    }
+     
+    // console.log("herere")
+  
+    const hashedpassword = await bcrypt.hash(password, 10);
+  
+    admin = await Admin.create({
+      firstname,
+      lastname,
+      username,
+      email,
+      password: hashedpassword,
+    });
+  
+    send_cookies(admin, res, "Registered Succesfully", 201);
+  };
+  
+  
+  
+  export const adminLogin = async (req, res) => {
+      const { email, password } = req.body;
+      const admin = await Admin.findOne({ email });
+  
+      if (!admin)
+        return res.status(404).json({
+          success: false,
+          message: "Admin dosen't Exist",
+        });
+    
+      const isMatch = await bcrypt.compare(password, admin.password);
+    
+      if (!isMatch)
+        return res.status(404).json({
+          success: false,
+          message: "Invalid Password",
+        });
+    
+      send_cookies(admin, res, `Welcome back ${admin.firstname}`, 200);
+    };
+  
+  
 
