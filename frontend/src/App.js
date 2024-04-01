@@ -14,6 +14,7 @@ import { Context } from './index.js'
 import AdminHome from './components/Admin/adminHome.js'
 import AdminPortfolio from './components/Admin/portfolio.js'
 import AdminProfile from './components/Admin/adminProfile.js'
+import ClickedImage from './components/NotLogin/clickedimage.js'
 
 const App = () => {
 
@@ -85,6 +86,7 @@ const App = () => {
     <Route path="/admin/portfolio" element= {<AdminPortfolio/>}/>;
     <Route path="/admin/profile" element= {<AdminProfile/>}/>;
     
+    <Route path="/clickedimage" element= {<ClickedImage/>}/>;
 
 
     </Routes>

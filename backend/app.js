@@ -6,6 +6,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 // import { isAuthenticated } from "./middlewares/auth.js";
 
+
 config({
     path: "./data/config.env"
 })
